@@ -50,6 +50,7 @@ public class CarController {
 //        return carService.getCarModelDetails();
 //    }
 
+
     @RequestMapping(value = "/ignek/products")
     public String getProductList() {
         return restTemplate

@@ -33,4 +33,5 @@ public class CarManufactureCustomeRepoImpl{
         return results.getMappedResults().stream()
                 .map(map -> (Map<String,Object>) map).toList();
     }
+    
 }

@@ -17,4 +17,5 @@ public interface CarManufactureCustomRepo extends MongoRepository<CarManufacture
             "{$project : {_id:1,name:1,models:1}}"
     })
     List<Map<String, Object>> findManufacturerByModel(String manufactureId);
+
 }

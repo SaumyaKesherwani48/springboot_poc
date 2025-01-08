@@ -14,5 +14,4 @@ public class DemoApplication {
 
 	@Bean
 	public RestTemplate getRestTemplate(){return  new RestTemplate();}
-
 }
