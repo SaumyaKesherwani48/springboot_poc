@@ -4,25 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5fbd16f6-ec11-472e-a0e7-22e932d1b3fa" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/demo/src/main/java/com/demoApp/demo/config/KafkaConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/src/main/java/com/demoApp/demo/constants/CarConstants.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/src/main/java/com/demoApp/demo/controller/CarController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/src/main/java/com/demoApp/demo/controller/KafkaController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/src/main/java/com/demoApp/demo/model/CarManufacturer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/src/main/java/com/demoApp/demo/model/carsModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/src/main/java/com/demoApp/demo/repository/CarManufactureCustomRepo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/src/main/java/com/demoApp/demo/repository/CarManufactureCustomeRepoImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/src/main/java/com/demoApp/demo/repository/CarManufacturerRepo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/src/main/java/com/demoApp/demo/repository/CarModelRepo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/src/main/java/com/demoApp/demo/service/CarService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/src/main/java/com/demoApp/demo/service/KafkaService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/src/test/java/com/demoApp/demo/controller/CarControllerTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/src/test/java/com/demoApp/demo/integration/CarControllerIntegrationTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/src/test/java/com/demoApp/demo/integration/CarServiceIntegrationTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/src/test/java/com/demoApp/demo/repository/CarManufactureCustomRepoImplTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/src/test/java/com/demoApp/demo/service/CarServiceTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="5fbd16f6-ec11-472e-a0e7-22e932d1b3fa" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
