@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaConsumer {
 
-    @KafkaListener(topics = ConsumerConstants.Location_update_Topic,groupId = ConsumerConstants.Group_Id)
-    public void updatedLocation(String msg){
+    @KafkaListener(topics = ConsumerConstants.model_update_Topic,groupId = ConsumerConstants.Group_Id)
+    public void updateCarModel(String msg){
         System.out.println(msg);
     }
 }
