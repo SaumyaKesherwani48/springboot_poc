@@ -1,25 +1,30 @@
-package com.demoApp.demo.service;
+package com.demoApp.demo.UnitTest;
 
+import com.demoApp.demo.constants.CarConstants;
 import com.demoApp.demo.model.CarManufacturer;
-import com.demoApp.demo.model.carsModel;
+import com.demoApp.demo.model.CarsModel;
 import com.demoApp.demo.repository.CarManufactureCustomRepo;
 import com.demoApp.demo.repository.CarManufacturerRepo;
 import com.demoApp.demo.repository.CarModelRepo;
+import com.demoApp.demo.service.CarService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
 import static org.bson.assertions.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
-class CarServiceTest {
-
+public class CarServiceUnitTest {
     @Mock
     private CarManufacturerRepo carManufacturerRepo;
 
@@ -29,18 +34,23 @@ class CarServiceTest {
     @Mock
     private CarManufactureCustomRepo customRepo;
 
+    @Mock
+    private KafkaTemplate<String, String> kafkaTemplate;
+
+    @Mock
+    private RestTemplate restTemplate;
+
     @InjectMocks
     private CarService carService;
+
     @Test
     void testSaveCarDetails() {
-        // Mock input and output
-        CarManufacturer carManufacturer = new CarManufacturer("1", "Tata");
-        when(carManufacturerRepo.save(carManufacturer)).thenReturn(carManufacturer);
 
-        // Call the method
+        CarManufacturer carManufacturer = new CarManufacturer("1", "Tata");
+        when(carManufacturerRepo.save(any(CarManufacturer.class))).thenReturn(carManufacturer);
+
         CarManufacturer result = carService.saveCarDetails(carManufacturer);
 
-        // Verify and assert
         assertNotNull(result);
         assertEquals("1", result.getId());
         assertEquals("Tata", result.getName());
@@ -49,33 +59,28 @@ class CarServiceTest {
 
     @Test
     void testSaveCarModelDetails() {
-        // Mock input and output
-        carsModel carModel = new carsModel("101", "Nexon", "1");
+        CarsModel carModel = new CarsModel("101", "Nexon", "1");
         when(carModelRepo.save(carModel)).thenReturn(carModel);
 
-        // Call the method
-        carsModel result = carService.saveCarModelDetails(carModel);
+        CarsModel result = carService.saveCarModelDetails(carModel);
 
-        // Verify and assert
         assertNotNull(result);
         assertEquals("101", result.getId());
         assertEquals("Nexon", result.getName());
-        verify(carModelRepo, times(1)).save(carModel);
+        verify(carModelRepo,times(1)).save(carModel);
+        verify(kafkaTemplate, times(1)).send(CarConstants.LOCATION_TOPIC,CarConstants.PRODUCER_SUCCESS_MSG);
     }
 
     @Test
     void testGetCarManufacturerList() {
-        // Mock input and output
         List<CarManufacturer> manufacturers = Arrays.asList(
                 new CarManufacturer("1", "Tata"),
                 new CarManufacturer("2", "Kia")
         );
         when(carManufacturerRepo.findAll()).thenReturn(manufacturers);
 
-        // Call the method
         List<CarManufacturer> result = carService.getCarManufactureList();
 
-        // Verify and assert
         assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals("Tata", result.get(0).getName());
@@ -97,10 +102,8 @@ class CarServiceTest {
 
         when(customRepo.findManufacturerByModel(manufacturerId)).thenReturn(mockResult);
 
-        // Call the method
         List<Map<String, Object>> result = carService.getCarModelByManufacture(manufacturerId);
 
-        // Verify and assert
         assertNotNull(result);
         assertEquals(1, result.size());
         assertEquals("Tata", result.get(0).get("name"));

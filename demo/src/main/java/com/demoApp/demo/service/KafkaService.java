@@ -16,7 +16,7 @@ public class KafkaService {
     private KafkaTemplate<String,String> kafkaTemplate;
 
     public Boolean updateLocation(String location){
-        kafkaTemplate.send(CarConstants.Loaction_Topic,location);
+        kafkaTemplate.send(CarConstants.LOCATION_TOPIC,location);
         logger.info("message produced");
         return true;
     }

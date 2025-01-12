@@ -1,0 +1,13 @@
+spring:
+  kafka:
+    producer:
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      bootstrap-servers: localhost:9092
+  application:
+    name: demo
+  data:
+    mongodb:
+      uri: mongodb+srv://admin:somya123@cluster0.xwsqs.mongodb.net/carDatabase?retryWrites=true&w=majority
+server:
+  port: '8081'

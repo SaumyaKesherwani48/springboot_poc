@@ -1,15 +1,17 @@
 package com.demoApp.demo.service;
 
 
+import com.demoApp.demo.constants.CarConstants;
 import com.demoApp.demo.model.CarManufacturer;
 
-import com.demoApp.demo.model.carsModel;
+import com.demoApp.demo.model.CarsModel;
 import com.demoApp.demo.repository.CarManufactureCustomRepo;
 import com.demoApp.demo.repository.CarManufacturerRepo;
 import com.demoApp.demo.repository.CarModelRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,18 +22,18 @@ import java.util.Map;
 @Service
 public class CarService {
 
-    @Autowired
-    private CarManufacturerRepo carManufacturerRepo;
-
-    @Autowired
-    private CarModelRepo carModelRepo;
-
-    @Autowired
-    private CarManufactureCustomRepo customeRepo;
-
+    // construtor dependency injection needs to lean more on this
+    private final CarManufacturerRepo carManufacturerRepo;
+    private final CarModelRepo carModelRepo;
+    private final CarManufactureCustomRepo customeRepo;
+    private final KafkaTemplate<String,String> kafkaTemplate;
     private final RestTemplate restTemplate;
 
-    public CarService(RestTemplate restTemplate) {
+    public CarService(CarManufacturerRepo carManufacturerRepo, CarModelRepo carModelRepo, CarManufactureCustomRepo customeRepo, KafkaTemplate<String, String> kafkaTemplate, RestTemplate restTemplate) {
+        this.carManufacturerRepo = carManufacturerRepo;
+        this.carModelRepo = carModelRepo;
+        this.customeRepo = customeRepo;
+        this.kafkaTemplate = kafkaTemplate;
         this.restTemplate = restTemplate;
     }
 
@@ -39,8 +41,14 @@ public class CarService {
         return carManufacturerRepo.save(carManufacturer);
     }
 
-    public carsModel saveCarModelDetails(carsModel carModel){
-        return carModelRepo.save(carModel);
+    public CarsModel saveCarModelDetails(CarsModel carModel){
+        CarsModel response = carModelRepo.save(carModel);
+        if(response.getId().isEmpty()){
+            kafkaTemplate.send(CarConstants.LOCATION_TOPIC,CarConstants.PRODUCER_FAILUER_MSG);
+        }else{
+            kafkaTemplate.send(CarConstants.LOCATION_TOPIC,CarConstants.PRODUCER_SUCCESS_MSG);
+        }
+        return response;
     }
 
     public List<CarManufacturer> getCarManufactureList (){
@@ -49,17 +57,6 @@ public class CarService {
 
     public List<Map<String, Object>> getCarModelByManufacture (String manufacturerId){
         return customeRepo.findManufacturerByModel(manufacturerId);
-    }
-
-    public carsModel getCarModelDetails(){
-        String url = "http://localhost:8080/car/getCarModel";
-
-        ResponseEntity<carsModel> response = restTemplate.getForEntity(url, carsModel.class);
-        if (response.getStatusCode() == HttpStatus.OK) {
-            return response.getBody();
-        } else {
-            return null;
-        }
     }
 
 }

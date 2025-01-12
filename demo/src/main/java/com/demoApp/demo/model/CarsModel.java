@@ -7,14 +7,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Document(collection = "carModel")
-public class carsModel {
+public class CarsModel {
 
     @Id
     private String id;
     private String name;
     private String manufacturerId;
 
-    public carsModel(String id, String name, String manufacturerId) {
+    public CarsModel(String id, String name, String manufacturerId) {
         this.id = id;
         this.name = name;
         this.manufacturerId = manufacturerId;
