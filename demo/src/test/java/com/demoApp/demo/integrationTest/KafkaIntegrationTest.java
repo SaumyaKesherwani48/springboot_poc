@@ -1,6 +1,5 @@
 package com.demoApp.demo.integrationTest;
 
-import com.demoApp.demo.service.KafkaService;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -27,9 +26,6 @@ public class KafkaIntegrationTest {
 
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
-
-    @Autowired
-    private KafkaService kafkaService;
 
     @Autowired
     private EmbeddedKafkaBroker embeddedKafkaBroker;

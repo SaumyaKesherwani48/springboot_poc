@@ -1,6 +1,5 @@
 package com.demoApp.demo.integrationTest;
 
-import com.demoApp.demo.controller.CarController;
 import com.demoApp.demo.model.CarManufacturer;
 import com.demoApp.demo.model.CarsModel;
 import com.demoApp.demo.service.CarService;
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.http.HttpStatus;
@@ -32,14 +30,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+// it loads the full application context for IT testing
 @SpringBootTest
+// configure and initialize the mockmvc which allows testing of REST endpoint without starting the full server
 @AutoConfigureMockMvc
+// automatically configure web component fro IT testing
 @AutoConfigureWireMock(port = 8080)
 public class CarControllerItTest {
 
+    // used to injects the mockMvc instance used to perform HTTP request
     @Autowired
     private MockMvc mockMvc;
 
+    // creates a bean and inject into the application context, allows mocking service layer during testing
     @MockitoBean
     private CarService carService;
 
@@ -47,6 +50,7 @@ public class CarControllerItTest {
 
     private CarManufacturer carManufacturer;
 
+    // execute before each of the test
     @BeforeEach
     public void setup() {
         carsModel = new CarsModel("123","kia","3");
@@ -56,14 +60,21 @@ public class CarControllerItTest {
     @Test
     void testCreateManufacturer() throws Exception {
 
+        /* This prevents interaction with the actual service
+             and allows to control the behavior during testing */
         when(carService.saveCarDetails(carManufacturer)).thenReturn(carManufacturer);
+
+        /* perform HTTP post request with provided data */
         mockMvc.perform(post("/car/createManufacturer")
                         .contentType("application/json")
+                        /* serialize the carManufacturer object into json
+                        format and include it in request body*/
                         .content(new ObjectMapper().writeValueAsString(carManufacturer)))
                 .andExpect(status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("3"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("tata"));
-
+        /* verifies that the carService.saveCarDetails method
+         was invoked exactly once with any instance of CarManufacturer */
         verify(carService, times(1)).saveCarDetails(any(CarManufacturer.class));
     }
 
@@ -133,7 +144,6 @@ public class CarControllerItTest {
                 mockMvc.perform(get("/car/getCarDetails"))
                 .andExpect(status().isOk());
         WireMock.verify(getRequestedFor(urlEqualTo("/api/products")));
-
     }
 
 
